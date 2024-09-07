@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="/static/css/clientes.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Clientes</h1>
+        <ul>
+            {% for cliente in dados_tecnicos.ONUs %}
+                <li>
+                    <strong>ID:</strong> {{ cliente.id }}<br>
+                    <strong>Estado:</strong> {{ cliente.state }}<br>
+                    <strong>Uptime:</strong> {{ cliente.uptime }}<br>
+                    <strong>Downtime:</strong> {{ cliente.downtime }}<br>
+                    <strong>Causa da Queda:</strong> {{ cliente.downcause }}<br>
+                    <strong>SN:</strong> {{ cliente.sn }}<br>
+                    <strong>Tipo:</strong> {{ cliente.type }}<br>
+                    <strong>Distância:</strong> {{ cliente.distance }}<br>
+                    <strong>Rx Power:</strong> {{ cliente.rx_power }}<br>
+                    <strong>Tx Power:</strong> {{ cliente.tx_power }}<br>
+                    <strong>Descrição:</strong> {{ cliente.description }}<br>
+                    {% for key, value in cliente.items() %}
+                        {% if key not in ["id", "state", "uptime", "downtime", "downcause", "sn", "type", "distance", "rx_power", "tx_power", "description"] %}
+                            <strong>{{ key }}:</strong> {{ value }}<br>
+                        {% endif %}
+                    {% endfor %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

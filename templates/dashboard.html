@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotions Dashboard</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .dashboard-container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        h1 {
+            color: #ffffff;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+        .back-button {
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Emotions Dashboard</h1>
+        <canvas id="emotionChart"></canvas>
+        <!-- Botão para voltar ao Chatbot -->
+        <div class="back-button">
+            <a href="/" class="btn btn-secondary">Voltar ao Chatbot</a>
+        </div>
+    </div>
+
+    <script>
+        async function fetchEmotionStats() {
+            const response = await fetch("/api/emotions-stats");
+            const data = await response.json();
+
+            const emotionLabels = Object.keys(data);
+            const emotionCounts = Object.values(data);
+
+            const ctx = document.getElementById('emotionChart').getContext('2d');
+            const emotionChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: emotionLabels,
+                    datasets: [{
+                        label: 'Emotions',
+                        data: emotionCounts,
+                        backgroundColor: [
+                            '#ff6384',
+                            '#36a2eb',
+                            '#ffce56',
+                            '#4bc0c0',
+                            '#9966ff'
+                        ],
+                        borderColor: '#121212',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        },
+                        tooltip: {
+                            bodyColor: '#ffffff',
+                            backgroundColor: '#333333',
+                            borderColor: '#121212',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fetch emotion stats every 5 seconds
+        setInterval(fetchEmotionStats, 5000);
+        fetchEmotionStats();
+    </script>
+</body>
+</html>

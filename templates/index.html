@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lidia</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center h-100">
+            <div class="col-md-8 col-xl-6 chat">
+                <div class="card">
+                    <div class="card-header msg_head">
+                        <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <img src="/static/images/lideri.jfif" class="rounded-circle user_img">
+                                <span class="online_icon"></span>
+                            </div>
+                            <div class="user_info">
+                                <span>ChatBot</span>
+                                <p>Lideri</p>
+                            </div>
+                            <!-- Botão para ir ao Dashboard -->
+                            <div class="ml-auto">
+                                <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="messageFormeight" class="card-body msg_card_body">
+                        <!-- Mensagens aparecerão aqui -->
+                    </div>
+                    <div class="card-footer">
+                        <form id="messageArea" class="input-group">
+                            <input type="text" id="text" name="user_input" placeholder="Digite sua mensagem..." autocomplete="off" class="form-control type_msg" required/>
+                            <div class="input-group-append">
+                                <button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        $('#messageArea').on('submit', function(event) {
+            event.preventDefault();
+            var userInput = $('#text').val();
+            $.ajax({
+                url: '/predict',
+                type: 'POST',
+                data: { 'user_input': userInput },
+                success: function(response) {
+                    $('#text').val(''); // Limpa o campo de texto
+                    var emotion = response.emotion;
+                    var botResponse = response.response;
+                    
+                    $('#messageFormeight').append(
+                        '<div class="d-flex justify-content-end mb-4">' +
+                        '<div class="msg_cotainer_send">' + userInput + '<br><span class="msg_emotion">(' + emotion + ')</span></div>' +
+                        '</div>'
+                    );
+                    $('#messageFormeight').append(
+                        '<div class="d-flex justify-content-start mb-4">' +
+                        '<div class="msg_cotainer bot_response">' + botResponse + '</div>' +
+                        '</div>'
+                    );
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
